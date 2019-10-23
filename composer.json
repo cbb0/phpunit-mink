@@ -1,5 +1,5 @@
 {
-	"name": "mwojtowicz/phpunit-mink",
+	"name": "cbb0/phpunit-mink",
 	"description": "Library for using Mink in PHPUnit tests. Supports session sharing between tests in a test case.",
 	"keywords": ["PHPUnit", "Selenium", "SauceLabs", "Sauce", "BrowserStack", "Mink", "Tests"],
 	"homepage": "http://github.com/minkphp/phpunit-mink",
@@ -13,7 +13,7 @@
 	],
 
 	"require": {
-		"php": ">=7.0",
+		"php": ">=7.1",
 		"behat/mink": "~1.6@dev",
 		"behat/mink-selenium2-driver": "~1.2",
 		"symfony/event-dispatcher": "~2.4|~3.0",
