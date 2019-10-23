@@ -120,7 +120,7 @@ abstract class AbstractTestSuite extends TestSuite implements IEventDispatcherAw
 	 *
 	 * @return void
 	 */
-	protected function tearDown(array $tests = null)
+	protected function tearDown(array $tests = null): void
 	{
 		if ( !isset($tests) ) {
 			$tests = $this->tests();

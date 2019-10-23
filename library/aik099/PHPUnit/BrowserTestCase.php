@@ -310,7 +310,7 @@ abstract class BrowserTestCase extends AbstractPHPUnitCompatibilityTestCase impl
 	 *
 	 * @return TestResult
 	 */
-	public function run(TestResult $result = null)
+	public function run(TestResult $result = null): TestResult
 	{
 		if ( $result === null ) {
 			$result = $this->createResult();
