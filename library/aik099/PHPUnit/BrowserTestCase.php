@@ -24,7 +24,9 @@ use aik099\PHPUnit\TestSuite\RegularTestSuite;
 use Behat\Mink\Exception\DriverException;
 use Behat\Mink\Session;
 use PHPUnit\Framework\TestResult;
+use ReflectionException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Throwable;
 
 /**
  * Test Case class for writing browser-based tests.
@@ -176,15 +178,12 @@ abstract class BrowserTestCase extends AbstractPHPUnitCompatibilityTestCase impl
 
 	/**
 	 * Set session meta-info for "Sauce Labs".
-	 *
-	 * @return void
 	 */
-	protected function setUp()
+	protected function setUp(): void
 	{
 		parent::setUp();
 
 		$this->_eventDispatcher->dispatch(
-			self::TEST_SETUP_EVENT,
 			new TestEvent($this)
 		);
 	}
@@ -301,15 +300,15 @@ abstract class BrowserTestCase extends AbstractPHPUnitCompatibilityTestCase impl
 		return $this->_session;
 	}
 
-	/**
-	 * Runs the test case and collects the results in a TestResult object.
-	 *
-	 * If no TestResult object is passed a new one will be created.
-	 *
-	 * @param TestResult $result Test result.
-	 *
-	 * @return TestResult
-	 */
+    /**
+     * Runs the test case and collects the results in a TestResult object.
+     *
+     * If no TestResult object is passed a new one will be created.
+     *
+     * @param TestResult $result Test result.
+     *
+     * @throws ReflectionException
+     */
 	public function run(TestResult $result = null): TestResult
 	{
 		if ( $result === null ) {
@@ -326,7 +325,6 @@ abstract class BrowserTestCase extends AbstractPHPUnitCompatibilityTestCase impl
 
 		// Do not call this before to give the time to the Listeners to run.
 		$this->_eventDispatcher->dispatch(
-			self::TEST_ENDED_EVENT,
 			new TestEndedEvent($this, $result, $this->_session)
 		);
 
@@ -352,11 +350,12 @@ abstract class BrowserTestCase extends AbstractPHPUnitCompatibilityTestCase impl
 		return $result->getCollectCodeCoverageInformation();
 	}
 
-	/**
-	 * Override to tell remote website, that code coverage information needs to be collected.
-	 *
-	 * @return mixed
-	 */
+    /**
+     * Override to tell remote website, that code coverage information needs to be collected.
+     *
+     * @return mixed
+     * @throws Throwable
+     */
 	protected function runTest()
 	{
 		if ( $this->getCollectCodeCoverageInformation() ) {
@@ -378,7 +377,6 @@ abstract class BrowserTestCase extends AbstractPHPUnitCompatibilityTestCase impl
 	public function onTestSuiteEnded()
 	{
 		$this->_eventDispatcher->dispatch(
-			self::TEST_SUITE_ENDED_EVENT,
 			new TestEvent($this, $this->_session)
 		);
 
@@ -416,15 +414,12 @@ abstract class BrowserTestCase extends AbstractPHPUnitCompatibilityTestCase impl
 	/**
 	 * This method is called when a test method did not execute successfully.
 	 *
-	 * @param \Throwable $e Exception.
-	 *
-	 * @return void
+	 * @param Throwable $t Exception.
 	 */
-	protected function onNotSuccessfulTestCompatibilized(\Throwable $e)
+	protected function onNotSuccessfulTestCompatibilized(Throwable $t): void
 	{
 		$this->_eventDispatcher->dispatch(
-			self::TEST_FAILED_EVENT,
-			new TestFailedEvent($e, $this, $this->_session)
+			new TestFailedEvent($t, $this, $this->_session)
 		);
 	}
 
@@ -449,5 +444,4 @@ abstract class BrowserTestCase extends AbstractPHPUnitCompatibilityTestCase impl
 	{
 		return array();
 	}
-
 }

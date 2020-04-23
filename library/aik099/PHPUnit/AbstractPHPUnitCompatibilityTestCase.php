@@ -13,6 +13,7 @@ namespace aik099\PHPUnit;
 
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Runner\Version;
+use Throwable;
 
 /**
  * Implementation for PHPUnit 5+
@@ -28,24 +29,22 @@ abstract class AbstractPHPUnitCompatibilityTestCase extends TestCase
     /**
      * This method is called when a test method did not execute successfully.
      *
-     * @param \Throwable $e Exception.
+     * @param Throwable $t Exception.
      *
-     * @return void
+     * @throws Throwable
      */
-    protected function onNotSuccessfulTest(\Throwable $e)
+    protected function onNotSuccessfulTest(Throwable $t): void
     {
-        $this->onNotSuccessfulTestCompatibilized($e);
+        $this->onNotSuccessfulTestCompatibilized($t);
 
-        parent::onNotSuccessfulTest($e);
+        parent::onNotSuccessfulTest($t);
     }
 
     /**
      * This method is called when a test method did not execute successfully.
      *
-     * @param \Throwable $e Exception.
-     *
-     * @return void
+     * @param Throwable $t Exception.
      */
-    abstract protected function onNotSuccessfulTestCompatibilized(\Throwable $e);
+    abstract protected function onNotSuccessfulTestCompatibilized(Throwable $t): void;
 
 }
